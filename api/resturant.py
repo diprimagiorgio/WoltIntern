@@ -19,7 +19,7 @@ class Resturant:
         coordsPtB = (lat,lon)
         return distance.distance(coordsPtA, coordsPtB).km
 
-    
+    # Used for debugging
     def __str__(self):
         return "\n\nI'm resturant {name} situated in {lat}, {lon} I'm {popularity:.2f} popular I'm open since {launchDate} and now I'm online = {online}!\n".\
             format(lat = self.lat, lon = self.lon, online = self.online, popularity = self.popularity, launchDate = self.launchDate, name = self.name )

@@ -1,4 +1,4 @@
-#!/home/diprima/Documents/Projects/WoltIntern/env/bin/python3
+#!/home/giorgio/Documents/WoltIntern/virenv/env/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
