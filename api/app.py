@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-import json                                 # necessary for loading the json
+from json import load                                
 from api.resturant import Resturant
 
 
@@ -54,7 +54,7 @@ def discovery():
     restaurants = []
    # from JSON to dictionary
     with open("restaurants.json") as jsonFile:
-        jsonResturants = json.load(jsonFile)        
+        jsonResturants = load(jsonFile)        
         jsonFile.close()
 
     # from dictionary to list of Restaurants 
