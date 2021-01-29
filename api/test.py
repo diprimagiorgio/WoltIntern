@@ -5,10 +5,6 @@ from api import app
 from random import randint
 from geopy import distance, Point
 
-#close all the resturant in the json file, execpt for 5
-# @app.route('/testCloseRestaurants')
-# def testCloseRestaurants():
-
 # generate a random point near one of the restaurants, and it calls the discovery function
 @app.route('/testRandomPoint')
 def testRandomPoint():
@@ -31,9 +27,9 @@ def testRandomPoint():
                                 )
         restaurants.append(objRestaurant)
     
-    #take a random resturant
+    #take a random restaurant
     rst = restaurants[randint(0,len(restaurants) - 1)]
-    # Define starting point.
+    # Define a starting point.
     start = Point(rst.lat, rst.lon)
 
     # Define a general distance object, initialized with a distance between 1.5 km to 3km.
