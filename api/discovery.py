@@ -1,22 +1,18 @@
-from flask import Flask, jsonify, request
+from flask import jsonify, request
 from json import load                                
-from api.resturant import Resturant
+from api.restaurant import Restaurant
+from api import app
 
-
-app = Flask(__name__)
-app.config['JSON_SORT_KEYS'] = False #otherwise flask changes the sorting in the output
-
-                
 #returns the first 10 elements if they are closer than 1.5 km. Opened restaurants are inserted first
 def getTop(restaurants, numElem, maxDistance):
     result = []
     offline = []
-    for (resturant, distance) in restaurants:
+    for (restaurant, distance) in restaurants:
         if len(result) < numElem and distance < maxDistance: # I need to find only 10 restaurants, Only restaurant closer than 1.5Km can be included in the result 
-            if resturant.online:
-                result.append(resturant)
+            if restaurant.online:
+                result.append(restaurant)
             else:
-                offline.append(resturant)
+                offline.append(restaurant)
     x = 0
     while len(result) < numElem and x < len(offline) :  # if I have not found the necessary elements I can include the offline one
             result.append(offline[x])
@@ -36,7 +32,6 @@ def transcribe_float(str_nb):
 def validate_params(lat, lon):
     return -90 <= lat <= 90 and -180 <= lon <= 180 
 
-
 @app.route('/discovery')
 def discovery():
     numElem = 10
@@ -50,40 +45,40 @@ def discovery():
     else:
         return "Bad Request, you must insert the  lat (latitude) and lon (longitude) values!", 400
 
-    #------------------------------------- Reading JSON and populating the list of restaurants
+    #------------------------------------- Reading JSON and populating the list of: (restaurants, the distance between the user location and the resturant)
     restaurants = []
    # from JSON to dictionary
     with open("restaurants.json") as jsonFile:
-        jsonResturants = load(jsonFile)        
+        jsonRestaurants = load(jsonFile)        
         jsonFile.close()
 
     # from dictionary to list of Restaurants 
-    for jsonResturant in jsonResturants["restaurants"]:
-        location = jsonResturant["location"]
-        objResturant =  Resturant(lon =  location[0], lat = location[1],
-                                  online = jsonResturant['online'],
-                                  popularity = jsonResturant['popularity'],
-                                  launchDate = jsonResturant['launch_date'],
-                                  name = jsonResturant['name'],
-                                  blurhash = jsonResturant['blurhash']
+    for jsonRestaurant in jsonRestaurants["restaurants"]:
+        location = jsonRestaurant["location"]
+        objRestaurant =  Restaurant(lon =  location[0], lat = location[1],
+                                  online = jsonRestaurant['online'],
+                                  popularity = jsonRestaurant['popularity'],
+                                  launchDate = jsonRestaurant['launch_date'],
+                                  name = jsonRestaurant['name'],
+                                  blurhash = jsonRestaurant['blurhash']
                                 )
-        distance = objResturant.distance(latUsr, lonUsr)
+        distance = objRestaurant.distance(latUsr, lonUsr)
         if  distance < maxDistance:
-            restaurants.append((objResturant, distance))
+            restaurants.append((objRestaurant, distance))
         
     #------------------------------------- Sorting 
     
     # most popular first
-    restaurants.sort(key=(lambda resturant: resturant[0].popularity ), reverse = True)
-    popularResturants = getTop(restaurants, numElem, maxDistance )
+    restaurants.sort(key=(lambda restaurant: restaurant[0].popularity ), reverse = True)
+    popularRestaurants = getTop(restaurants, numElem, maxDistance )
     
     # newest first
-    restaurants.sort(key=(lambda resturant: resturant[0].launchDate), reverse = True)
-    newestResturants = getTop(restaurants, numElem, maxDistance)
+    restaurants.sort(key=(lambda restaurant: restaurant[0].launchDate), reverse = True)
+    newestRestaurants = getTop(restaurants, numElem, maxDistance)
     
     # closest first
-    restaurants.sort(key= (lambda resturant : resturant[1] ), reverse = True)
-    closestResturant = getTop(restaurants, numElem, maxDistance)
+    restaurants.sort(key= (lambda restaurant : restaurant[1] ), reverse = True)
+    closestRestaurants = getTop(restaurants, numElem, maxDistance)
 
     #------------------------------------- Enveloping result 
 
@@ -92,19 +87,17 @@ def discovery():
         "sections" : [
             {
                 "title" : "Popular Restaurants",
-                "restaurants" : [ resturant.getDict() for resturant in popularResturants]
+                "restaurants" : [ restaurant.getDict() for restaurant in popularRestaurants]
             },
             {
                 "title" : "New Restaurants",
-                "restaurants" : [ resturant.getDict() for resturant in newestResturants]
+                "restaurants" : [ restaurant.getDict() for restaurant in newestRestaurants]
             },
             {
                 "title" : "Nearby Restaurants",
-                "restaurants" : [ resturant.getDict() for resturant in closestResturant]
+                "restaurants" : [ restaurant.getDict() for restaurant in closestRestaurants]
             }
         ]
     }
 
     return jsonify(result)
-
-    

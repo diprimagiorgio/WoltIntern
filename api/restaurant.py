@@ -1,7 +1,7 @@
 from datetime import date
 from geopy import distance
 
-class Resturant:
+class Restaurant:
 
     def __init__(self, lat, lon, online, popularity, launchDate, name, blurhash):
         self.blurhash = blurhash
@@ -21,7 +21,7 @@ class Resturant:
 
     # Used for debugging
     def __str__(self):
-        return "\n\nI'm resturant {name} situated in {lat}, {lon} I'm {popularity:.2f} popular I'm open since {launchDate} and now I'm online = {online}!\n".\
+        return "\n\nI'm restaurant {name} situated in {lat}, {lon} I'm {popularity:.2f} popular I'm open since {launchDate} and now I'm online = {online}!\n".\
             format(lat = self.lat, lon = self.lon, online = self.online, popularity = self.popularity, launchDate = self.launchDate, name = self.name )
 
 
