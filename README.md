@@ -22,7 +22,10 @@ user@user:~/<path>/WoltIntern$ source "<path>/env/bin/activate"
 ```
 start the flask app
 ```console
-(env) user@user:~/<path>/WoltIntern$ python3 __main__.py
+(env) user@user:~/<path>/WoltIntern$ export FLASK_ENV=development; export FLASK_APP=api/__init__.py; flask run
 ```
-Do a request. Visit the page [localhost:5000/discovery?lat=60.1709&lon=24.941](localhost:5000/discovery?lat=60.1709&lon=24.941)
+Do a request. Visit the page [localhost:5000/discovery?lat=60.1709&lon=24.941](http://localhost:5000/discovery?lat=60.1709&lon=24.941)
 
+## Test
+There is a test function that can generate some random coordinates, near one of the restaurants. 
+[localhost:5000/testRandomPoint](http://localhost:5000/testRandomPoint) 
