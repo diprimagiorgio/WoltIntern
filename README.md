@@ -27,5 +27,5 @@ start the flask app
 Do a request. Visit the page [localhost:5000/discovery?lat=60.1709&lon=24.941](http://localhost:5000/discovery?lat=60.1709&lon=24.941)
 
 ## Test
-There is a test function that can generate some random coordinates, near one of the restaurants. 
+There is a test function that can generate some random coordinates, near one of the restaurants, between 1.5km to 3km far away from the restaurant. The result list can be empty. 
 [localhost:5000/testRandomPoint](http://localhost:5000/testRandomPoint) 
