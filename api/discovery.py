@@ -40,7 +40,7 @@ def discovery():
     if request.args.get('lat') and request.args.get('lon') :    
         latUsr = transcribe_float(request.args.get('lat'))
         lonUsr = transcribe_float(request.args.get('lon'))
-        if not validate_params(latUsr, lonUsr):
+        if not (latUsr and lonUsr and validate_params(latUsr, lonUsr)):
             return "Bad Request, the values are not correct!", 400
     else:
         return "Bad Request, you must insert the  lat (latitude) and lon (longitude) values!", 400

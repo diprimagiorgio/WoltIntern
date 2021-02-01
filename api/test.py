@@ -1,9 +1,25 @@
-from flask import redirect
+from flask import redirect, url_for
 from json import load                                
 from api.restaurant import Restaurant
 from api import app
 from random import randint
 from geopy import distance, Point
+
+# to get a  random element of the list in input
+def rndElem(lst):
+    return lst[ randint(0,len(lst) - 1)]
+
+#to generate a request with an error in input lat
+@app.route('/testInvalidLat')
+def testInvalidLat():
+    latInvalid = [120, True, "error", 99.8]
+    return redirect(url_for('discovery', lat=rndElem(latInvalid), lon = 63 ))
+
+#to generate a request with an error in input lon
+@app.route('/testInvalidLon')
+def testInvalidLon():
+    lonInvalid = [181, True, "error", 181.9, -181, -186]
+    return redirect(url_for('discovery', lat= 60, lon = rndElem(lonInvalid) ))
 
 # generate a random point near one of the restaurants, and it calls the discovery function
 @app.route('/testRandomPoint')
@@ -28,7 +44,7 @@ def testRandomPoint():
         restaurants.append(objRestaurant)
     
     #take a random restaurant
-    rst = restaurants[randint(0,len(restaurants) - 1)]
+    rst = rndElem(restaurants)
     # Define a starting point.
     start = Point(rst.lat, rst.lon)
 
